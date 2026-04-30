@@ -5,6 +5,7 @@ class AllUsersTile extends StatelessWidget {
   final String name;
   final String role;
   final String ipAddress;
+  final String location;
   final bool isActive;
 
   const AllUsersTile({
@@ -12,6 +13,7 @@ class AllUsersTile extends StatelessWidget {
     required this.name,
     required this.role,
     required this.ipAddress,
+    required this.location,
     required this.isActive,
   });
 
@@ -40,7 +42,13 @@ class AllUsersTile extends StatelessWidget {
         padding: const EdgeInsets.all(20),
         child: Column(
           mainAxisSize: MainAxisSize.min,
-          children: [_buildHeader(), const SizedBox(height: 16), _buildIpRow()],
+          children: [
+            _buildHeader(),
+            const SizedBox(height: 16),
+            _buildIpRow(),
+            const SizedBox(height: 10),
+            _buildLocationRow(),
+          ],
         ),
       ),
     );
@@ -130,7 +138,7 @@ class AllUsersTile extends StatelessWidget {
           CircleAvatar(
             radius: 5,
             backgroundColor: isActive ? kPrimaryColor : kGreyColor,
-          ), //***************************** */
+          ),
           const SizedBox(width: 6),
           Text(
             isActive ? 'Active' : 'Offline',
@@ -175,6 +183,44 @@ class AllUsersTile extends StatelessWidget {
               letterSpacing: 0.5,
             ),
           ),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildLocationRow() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        const Text(
+          'LOCATION',
+          style: TextStyle(
+            fontSize: 11,
+            fontWeight: FontWeight.w500,
+            color: kGreyColor,
+            letterSpacing: 0.5,
+          ),
+        ),
+        Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Icon(
+              Icons.location_on_outlined,
+              size: 13,
+              color: isActive ? kSecondaryColor : kGreyColor,
+            ),
+            const SizedBox(width: 4),
+            Text(
+              overflow: TextOverflow.ellipsis,
+              location,
+              style: TextStyle(
+                fontSize: 13,
+                fontWeight: FontWeight.w500,
+                color: isActive ? kSecondaryColor : kGreyColor,
+                letterSpacing: 0.3,
+              ),
+            ),
+          ],
         ),
       ],
     );

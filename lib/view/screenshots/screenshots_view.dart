@@ -12,6 +12,8 @@ class ScreenshotsView extends StatelessWidget {
   final String name;
   final bool activeStatus;
   final String ipadress;
+  final String longitude;
+  final String latitude;
   final DateTime lastActive;
   final List<ScreenshotModel> screenShots;
 
@@ -20,6 +22,8 @@ class ScreenshotsView extends StatelessWidget {
     required this.name,
     required this.activeStatus,
     required this.ipadress,
+    required this.longitude,
+    required this.latitude,
     required this.lastActive,
     required this.screenShots,
   });
@@ -36,6 +40,8 @@ class ScreenshotsView extends StatelessWidget {
               ipAddress: ipadress,
               isActive: activeStatus,
               lastActive: lastActive,
+              latitude: latitude,
+              longitude: longitude,
               imageUrl: null, // or a URL string
             ),
             onScreenshotTap: () {},

@@ -10,7 +10,9 @@ class SidebarUser {
   final String ipAddress;
   final bool isActive;
   final DateTime? lastActive;
-  final String? imageUrl; // null → shows person icon
+  final String? imageUrl;
+  final String? latitude; // ← added
+  final String? longitude; // ← added
 
   const SidebarUser({
     required this.name,
@@ -18,6 +20,8 @@ class SidebarUser {
     required this.isActive,
     this.lastActive,
     this.imageUrl,
+    this.latitude, // ← added
+    this.longitude, // ← added
   });
 }
 
@@ -28,7 +32,6 @@ class SidebarScreenshotviewWidght extends StatefulWidget {
   final VoidCallback? onAllUserTap;
   final VoidCallback? onScreenshotTap;
 
-  /// Pass a user to show the info card. If null the card is hidden.
   final SidebarUser? selectedUser;
 
   const SidebarScreenshotviewWidght({
@@ -82,7 +85,6 @@ class _SidebarScreenshotviewWidghtState
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // ── Logo ──────────────────────────────
           AppLogoWidet(withTitle: true),
 
           const Padding(
@@ -101,7 +103,6 @@ class _SidebarScreenshotviewWidghtState
 
           _buildSidebarItem(Icons.people_alt_rounded, 'Users', true),
 
-          // ── User info card (shown below Users tile) ──
           if (widget.selectedUser != null) ...[
             const SizedBox(height: 12),
             _UserInfoCard(user: widget.selectedUser!),
@@ -109,7 +110,6 @@ class _SidebarScreenshotviewWidghtState
 
           const Spacer(),
 
-          // ── Animated Screenshot Button ────────
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
             child: AnimatedBuilder(
@@ -254,12 +254,10 @@ class _UserInfoCard extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // ── Avatar + name + status badge ──────
             Padding(
               padding: const EdgeInsets.fromLTRB(12, 12, 12, 10),
               child: Row(
                 children: [
-                  // Avatar with online dot
                   Stack(
                     children: [
                       Container(
@@ -291,7 +289,6 @@ class _UserInfoCard extends StatelessWidget {
                                 ),
                         ),
                       ),
-                      // Status dot
                       Positioned(
                         bottom: 1,
                         right: 1,
@@ -310,7 +307,6 @@ class _UserInfoCard extends StatelessWidget {
 
                   const SizedBox(width: 10),
 
-                  // Name + pill badge
                   Expanded(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -327,7 +323,6 @@ class _UserInfoCard extends StatelessWidget {
                           ),
                         ),
                         const SizedBox(height: 4),
-                        // Status pill
                         IntrinsicWidth(
                           child: Container(
                             padding: const EdgeInsets.symmetric(
@@ -370,14 +365,12 @@ class _UserInfoCard extends StatelessWidget {
               ),
             ),
 
-            // ── Separator ─────────────────────────
             Divider(
               height: 1,
               thickness: 1,
               color: kPrimaryColor.withValues(alpha: .08),
             ),
 
-            // ── IP Address ────────────────────────
             _InfoRow(
               icon: Icons.router_rounded,
               label: 'IP Address',
@@ -392,11 +385,40 @@ class _UserInfoCard extends StatelessWidget {
               color: kPrimaryColor.withValues(alpha: .06),
             ),
 
-            // ── Last Active ───────────────────────
             _InfoRow(
               icon: Icons.access_time_rounded,
               label: 'Last Active',
-              value: _formatLastActive(user.lastActive),
+              value: _formatLastActive(
+                user.lastActive,
+              ), // ← still uses DateTime
+            ),
+
+            Divider(
+              height: 1,
+              thickness: 1,
+              indent: 12,
+              endIndent: 12,
+              color: kPrimaryColor.withValues(alpha: .06),
+            ),
+
+            _InfoRow(
+              icon: Icons.swap_vert,
+              label: 'Latitude',
+              value: user.latitude ?? 'N/A', // ← fixed: directly use String
+            ),
+
+            Divider(
+              height: 1,
+              thickness: 1,
+              indent: 12,
+              endIndent: 12,
+              color: kPrimaryColor.withValues(alpha: .06),
+            ),
+
+            _InfoRow(
+              icon: Icons.swap_horiz,
+              label: 'Longitude',
+              value: user.longitude ?? 'N/A', // ← fixed: directly use String
               isLast: true,
             ),
           ],
