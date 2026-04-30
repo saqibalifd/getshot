@@ -1,7 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:getshotapp/view/allUsers/all_users_view.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Supabase.initialize(
+    url: 'https://yvpmthatdljrosekfxmy.supabase.co',
+
+    anonKey: 'sb_publishable_lL0JO74hagaOAePdf1EZWQ_3gEi1iP9',
+  );
   runApp(const MyApp());
 }
 
