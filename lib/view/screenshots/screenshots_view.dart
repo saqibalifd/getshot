@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:getshotapp/constants/app_colors.dart';
 import 'package:getshotapp/models/screenshot_model.dart';
+import 'package:getshotapp/util/download_progress_dialog.dart';
 
 import 'package:getshotapp/view/allUsers/all_users_view.dart';
 import 'package:getshotapp/view/screenshots/full_screen_Image_view.dart';
@@ -82,7 +83,11 @@ class ScreenshotsView extends StatelessWidget {
                             );
                           },
                           onDownload: () {
-                            print('on download tap');
+                            DownloadProgressDialog.show(
+                              context,
+                              imageUrl: screenShots[index].downloadUrl,
+                              title: screenShots[index].id,
+                            );
                           },
                           imageUrl: screenShots[index].downloadUrl,
                           title: screenShots[index].id,
