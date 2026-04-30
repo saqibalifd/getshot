@@ -1,13 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:getshotapp/constants/app_colors.dart';
 import 'package:getshotapp/models/screenshot_model.dart';
+import 'package:getshotapp/provider/admin_provider.dart';
 import 'package:getshotapp/util/download_progress_dialog.dart';
 
 import 'package:getshotapp/view/allUsers/all_users_view.dart';
 import 'package:getshotapp/view/screenshots/full_screen_Image_view.dart';
+import 'package:getshotapp/widgets/empty_state_widget.dart';
 import 'package:getshotapp/widgets/grid_card_widget.dart';
 import 'package:getshotapp/widgets/sidebar_screenshotview_widght.dart';
 import 'package:getshotapp/widgets/topbar_alluser_widget.dart';
+import 'package:provider/provider.dart';
 
 class ScreenshotsView extends StatelessWidget {
   final String name;
@@ -58,44 +61,53 @@ class ScreenshotsView extends StatelessWidget {
                 TopbarAlluserWidget(
                   title: "Screen Shots",
                   onClearAll: () {
-                    print('clear all');
+                    final provider = Provider.of<AdminProvider>(
+                      context,
+                      listen: false,
+                    );
+                    provider.clearAllScreenshots(ipadress);
+                    Navigator.pop(context);
                   },
                 ),
-                Expanded(
-                  child: GridView.builder(
-                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 3,
-                    ),
-                    itemCount: screenShots.length,
-                    itemBuilder: (context, index) {
-                      return Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: GridCardWidget(
-                          onView: () {
-                            Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                builder: (context) => FullScreenImageView(
-                                  imageUrl: screenShots[index].downloadUrl,
-                                  title: screenShots[index].id,
-                                ),
+                screenShots.isEmpty
+                    ? EmptyStateWidget()
+                    : Expanded(
+                        child: GridView.builder(
+                          gridDelegate:
+                              SliverGridDelegateWithFixedCrossAxisCount(
+                                crossAxisCount: 3,
+                              ),
+                          itemCount: screenShots.length,
+                          itemBuilder: (context, index) {
+                            return Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: GridCardWidget(
+                                onView: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (context) => FullScreenImageView(
+                                        imageUrl:
+                                            screenShots[index].downloadUrl,
+                                        title: screenShots[index].id,
+                                      ),
+                                    ),
+                                  );
+                                },
+                                onDownload: () {
+                                  DownloadProgressDialog.show(
+                                    context,
+                                    imageUrl: screenShots[index].downloadUrl,
+                                    title: screenShots[index].id,
+                                  );
+                                },
+                                imageUrl: screenShots[index].downloadUrl,
+                                title: screenShots[index].id,
                               ),
                             );
                           },
-                          onDownload: () {
-                            DownloadProgressDialog.show(
-                              context,
-                              imageUrl: screenShots[index].downloadUrl,
-                              title: screenShots[index].id,
-                            );
-                          },
-                          imageUrl: screenShots[index].downloadUrl,
-                          title: screenShots[index].id,
                         ),
-                      );
-                    },
-                  ),
-                ),
+                      ),
               ],
             ),
           ),
