@@ -92,4 +92,11 @@ class AdminProvider with ChangeNotifier {
       notifyListeners();
     }
   }
+
+  Future<void> requestScreenshot(String ipadress) async {
+    await Supabase.instance.client.from('screenshot_commands').insert({
+      'status': 'pending',
+      'target_ip': ipadress, // from userdata table
+    });
+  }
 }

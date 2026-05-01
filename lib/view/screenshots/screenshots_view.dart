@@ -46,9 +46,15 @@ class ScreenshotsView extends StatelessWidget {
               lastActive: lastActive,
               latitude: latitude,
               longitude: longitude,
-              imageUrl: null, // or a URL string
+              imageUrl: null, //
             ),
-            onScreenshotTap: () {},
+            onScreenshotTap: () {
+              final provider = Provider.of<AdminProvider>(
+                context,
+                listen: false,
+              );
+              provider.requestScreenshot(ipadress);
+            },
             onAllUserTap: () => Navigator.push(
               context,
               MaterialPageRoute(builder: (context) => AllUsersView()),
